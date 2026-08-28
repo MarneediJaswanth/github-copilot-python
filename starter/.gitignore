@@ -1,0 +1,6 @@
+# Git ignore for starter project
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
