@@ -1,6 +1,8 @@
 // Client-side rendering and interaction for the Flask-backed Sudoku
 const SIZE = 9;
 let puzzle = [];
+let currentPuzzleId = null;
+let hintsUsed = 0;
 // Timer state
 let timerInterval = null;
 let elapsedSeconds = 0;
@@ -11,7 +13,6 @@ function formatTime(s) {
 
 function applyTheme(theme) {
   if (theme === 'dark') {
-let currentPuzzleId = null;
     document.body.classList.add('dark');
   } else {
     document.body.classList.remove('dark');
@@ -89,9 +90,11 @@ function saveScoresList(list) {
   localStorage.setItem('sudoku_top_scores', JSON.stringify(list));
 }
 
-function saveScoreLocal(name, time, difficulty) {
+function saveScoreLocal(name, time, difficulty, hints = 0) {
   const scores = getStoredScores();
-  scores.push({name: name || 'Anonymous', time: time, difficulty: difficulty});
+  // ensure hints is a number and default to 0 for backward compatibility
+  const hintsVal = (typeof hints === 'number' && hints >= 0) ? hints : 0;
+  scores.push({name: name || 'Anonymous', time: time, difficulty: difficulty, hints: hintsVal});
   scores.sort((a, b) => a.time - b.time);
   const trimmed = scores.slice(0, 10);
   saveScoresList(trimmed);
@@ -113,8 +116,9 @@ function renderScores() {
     const rankTd = document.createElement('td'); rankTd.innerText = String(idx + 1);
     const nameTd = document.createElement('td'); nameTd.innerText = s.name;
     const timeTd = document.createElement('td'); timeTd.innerText = String(s.time);
+    const hintsTd = document.createElement('td'); hintsTd.innerText = String((s.hints !== undefined) ? s.hints : 0);
     const diffTd = document.createElement('td'); diffTd.innerText = s.difficulty;
-    tr.appendChild(rankTd); tr.appendChild(nameTd); tr.appendChild(timeTd); tr.appendChild(diffTd);
+    tr.appendChild(rankTd); tr.appendChild(nameTd); tr.appendChild(timeTd); tr.appendChild(hintsTd); tr.appendChild(diffTd);
     tbody.appendChild(tr);
   });
 }
@@ -166,7 +170,7 @@ function createBoardElement() {
         fetch('/check_cell', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({row, col, value: parseInt(val, 10)})
+          body: JSON.stringify({row, col, value: parseInt(val, 10), puzzle_id: currentPuzzleId})
         }).then(r => r.json()).then(data => {
           if (data && data.correct === true) {
             e.target.classList.remove('incorrect');
@@ -224,7 +228,6 @@ function renderPuzzle(puz) {
   createBoardElement();
   const boardDiv = document.getElementById('sudoku-board');
   const inputs = boardDiv.getElementsByTagName('input');
-  let currentPuzzleId = null;
   for (let i = 0; i < SIZE; i++) {
     for (let j = 0; j < SIZE; j++) {
       const idx = i * SIZE + j;
@@ -249,6 +252,7 @@ async function newGame() {
   const data = await res.json();
   renderPuzzle(data.puzzle);
   currentPuzzleId = data.puzzle_id;
+  hintsUsed = 0;
   document.getElementById('message').innerText = '';
   // reset and start timer when a new game begins
   resetTimer();
@@ -348,6 +352,7 @@ window.addEventListener('load', () => {
       inp.classList.remove('incorrect');
       inp.classList.add('hinted');
       inp.setAttribute('title', 'Hinted cell');
+      hintsUsed = (hintsUsed || 0) + 1;
       msg.style.color = '#388e3c';
       msg.innerText = `Hint applied at row ${r+1}, col ${c+1}`;
       // After a hint is applied, check whether puzzle is solved.
@@ -365,7 +370,7 @@ window.addEventListener('load', () => {
       const name = document.getElementById('player-name')?.value || 'Anonymous';
       const difficulty = document.getElementById('difficulty')?.value || 'medium';
       // elapsedSeconds holds the completion time
-      saveScoreLocal(name, elapsedSeconds, difficulty);
+      saveScoreLocal(name, elapsedSeconds, difficulty, hintsUsed || 0);
       hideSaveScoreUI();
       const msg = document.getElementById('message');
       if (msg) { msg.style.color = '#388e3c'; msg.innerText = 'Score saved.'; }
