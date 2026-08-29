@@ -14,7 +14,7 @@ body {
     --prefilled-bg: #e0e0e0;
     --hinted-bg: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
     --incorrect-bg: linear-gradient(135deg, #ffcdd2 0%, #ffebee 100%);
-    --block-bg: rgba(0,0,0,0.03);
+    --block-bg: #f0f0f0;
     --primary: #1976d2;
     background: var(--bg);
     color: var(--text);
@@ -121,9 +121,8 @@ h1 {
 }
 
 .sudoku-cell.block-alt {
-    background: linear-gradient(0deg, var(--block-bg), transparent);
+    background: var(--block-bg);
 }
-
 .sudoku-cell:nth-child(3),
 .sudoku-cell:nth-child(6) {
     border-right: 3px solid var(--border);
