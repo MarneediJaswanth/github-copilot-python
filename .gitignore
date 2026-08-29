@@ -4,3 +4,33 @@ Thumbs.db
 
 # Ignore Python virtual environment
 .venv/
+
+# Common Python/virtualenv artifacts
+venv/
+env/
+ENV/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+
+# pytest cache
+.pytest_cache/
+
+# Test and coverage reports
+.coverage
+htmlcov/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# mypy
+.mypy_cache/
+
+# Virtual environment
+venv/

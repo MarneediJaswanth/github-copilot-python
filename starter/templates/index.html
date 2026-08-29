@@ -6,12 +6,45 @@
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <h1>Sudoku Game</h1>
-  <div id="sudoku-board"></div>
-  <div class="controls">
+  <header>
+    <h1>Sudoku Game</h1>
+  </header>
+  <main>
+    <section id="game-area">
+      <div id="sudoku-board" aria-label="Sudoku board" role="region"></div>
+      <aside id="scoreboard-panel" aria-label="Scoreboard and controls">
+      </aside>
+    </section>
+    <div class="controls" role="region" aria-label="Game controls">
+    <div id="timer" aria-live="polite">Time: 0s</div>
+    <label for="difficulty">Difficulty:</label>
+    <select id="difficulty">
+      <option value="easy">Easy</option>
+      <option value="medium" selected>Medium</option>
+      <option value="hard">Hard</option>
+    </select>
     <button id="new-game">New Game</button>
     <button id="check-solution">Check Solution</button>
+    <button id="hint">Hint</button>
     <span id="message"></span>
+    <label for="theme-toggle" class="theme-toggle-label">Theme:</label>
+    <button id="theme-toggle" aria-pressed="false">Dark Mode</button>
+  </div>
+  <div id="scoreboard-panel">
+    <h2>Top 10 Fastest Times</h2>
+    <div id="scoreboard-empty">No scores yet.</div>
+    <table id="scoreboard" aria-live="polite">
+      <thead>
+        <tr><th scope="col">Rank</th><th scope="col">Name</th><th scope="col">Time (s)</th><th scope="col">Difficulty</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="save-score" class="hidden">
+      <label for="player-name">Your name:</label>
+      <input id="player-name" type="text" maxlength="32" aria-label="Player name" />
+      <button id="save-score-btn">Save Score</button>
+      <button id="cancel-save-btn">Cancel</button>
+    </div>
   </div>
   <script src="/static/main.js"></script>
 </body>

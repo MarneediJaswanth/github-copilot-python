@@ -1,60 +1,86 @@
-# Refactor a Sudoku Game written in Python Flask
+# Sudoku — Flask Web Game
 
-Use this simple Sudoku game as a starting point to practice your skills with GitHub Copilot. The goal is to refactor the code to use modern technologies, while also adding new features and improving the overall user experience.
+This repository contains a simple Sudoku web game built with Python and Flask. It provides a responsive, accessible UI and gameplay features suitable for desktop and mobile browsers.
 
-## Getting Started
+## Main features
+- Playable Sudoku board with client-side input
+- Difficulty levels: Easy, Medium, Hard
+- Unique-solution puzzle generation on the server
+- Live invalid-entry feedback (per-cell validation)
+- Check Solution button (server-side verification)
+- Hint button that fills and locks one correct cell
+- Timer to measure completion time
+- Top 10 fastest-times scoreboard persisted in browser `localStorage`
+- Dark / Light Mode with persisted preference
+- Responsive and accessible UI (keyboard navigation, focus states)
 
-Follow these instructions to get a copy of the project up and running on your local machine.
+## Technologies
+- Python
+- Flask
+- HTML
+- CSS
+- JavaScript
+- pytest (for unit / integration tests)
 
-### Dependencies
+## Requirements / Prerequisites
+- Python 3.8 or newer
+- pip
+- A modern web browser (Chrome, Firefox, Edge, Safari)
 
-```
-- Modern web browser (Chrome, Firefox, Edge, etc.)
-- Python 3
-```
+## Setup (Windows)
+Open PowerShell and run:
 
-### Installation
-
-1. Fork this repository to your GitHub account. (You can use the "Fork" button on the top right corner of the repository page.)
-
-2. Clone your forked repository to your local machine.
-
-3. Open a terminal window and navigate to the "github-copilot-python/starter" directory.
-
-4. Create a Python virtual environment and activate it (optional but highly recommended).
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-5. Install required Python packages.
-
-```bash
+```powershell
+cd path\to\github-copilot-python\starter
+python -m venv venv
+# PowerShell (if execution policy prevents activation, run PowerShell as Administrator or use cmd)
+.\venv\Scripts\Activate.ps1
+# or cmd.exe
+.\venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
-6. Run the Flask app.
+## Run the application
+From the `starter` folder run:
 
-```bash
+```powershell
 python app.py
 ```
 
-7. Open http://127.0.0.1:5000 in your browser.
+Then open http://127.0.0.1:5000 in your browser.
 
-## Project Instructions
+## Run tests
+From the `starter` folder run:
 
-Use GitHub Copilot to refactor the code for this game to add more advanced features. The goal is to create a more modern and maintainable codebase and add additional functionality to the final product. You can use any combination of code completion and chat features, like Ask, Edit, or Agent modes.
+```powershell
+python -m pytest
+```
 
-- Errors should be handled gracefully with appropriate messages to the user.
-- Implement a Sudoku board generator that creates a valid Sudoku puzzle with a unique solution.
-- Add a timer to track how long it takes to solve the puzzle.
-- Implement a solution checker that verifies if the user's solution is correct using event delegation.
-- Add a difficulty selector to allow users to choose between easy, medium, and hard puzzles.
-- Add a hint feature that provides clues for the user that are noted with unique colors.
-- Add a check puzzle button that checks the current state of the board against the solution.
-- User should get immediate feedback on their input, such as highlighting invalid entries.
-- Top 10 scores should be saved in local storage and displayed on the page with the user's name, time taken, hints used, and difficulty level.
-- The game should be responsive and work well on both desktop and mobile devices.
-- UI colors should be visually appealing and accessible.
-- Completed and correct puzzles should display a congratulatory message with the time taken and hints used and ask for the user's name for Top 10 times.
+Current test suite: 19 passing tests.
+
+## Project structure
+- `starter/` — application package and static assets
+	- `app.py` — Flask application and JSON endpoints
+	- `sudoku_logic.py` — generator and solver utilities
+	- `templates/index.html` — main UI
+	- `static/styles.css` — styles and themes
+	- `static/main.js` — client behavior (board rendering, timer, scoreboard, theme)
+	- `tests/` — pytest test suite
+- `README.md` — this document
+
+## Scoreboard and theme persistence
+The Top 10 scoreboard and the user's theme preference are stored in the browser using `localStorage`. Scores include `name`, `time` (seconds), and `difficulty`. Theme preference is saved under `sudoku_theme` and restored on page load.
+
+## How to use the game
+1. Open the app in your browser.
+2. Choose a `Difficulty` (Easy / Medium / Hard) and click `New Game`.
+3. Fill cells with numbers 1–9. Invalid entries are highlighted immediately.
+4. Use `Check Solution` to validate the full board.
+5. Click `Hint` to fill one correct empty cell — the hinted cell becomes locked.
+6. Timer starts on a new game and stops on solve; you can save your name to the Top 10 scoreboard when you finish.
+
+## Screenshots and milestones
+If present, a `Screenshots/` folder contains Copilot milestone screenshots demonstrating UI changes and accessibility improvements. These images illustrate responsive layouts, dark mode, keyboard navigation, and hint/incorrect cell visuals.
+
+---
+If you notice anything that doesn't match the running application (behavior or tests), please open an issue or share the failing test output and I will help diagnose and fix it.
